@@ -71,7 +71,8 @@ private:
   edm::InputTag jetLabel_;
   edm::InputTag metLabel_;
   edm::InputTag uncLabel_;
-  edm::InputTag jpsiLabel_;
+  edm::InputTag jpsiMuMuLabel_;
+  edm::InputTag jpsiElElLabel_;
   std::string bTagType_;
 
   VString eventCounterLabels_;
@@ -117,8 +118,11 @@ KGenericNtupleMaker::KGenericNtupleMaker(const edm::ParameterSet& pset)
   jetLeptonDeltaR_ = jetMETPSet.getParameter<double>("leptonDeltaR");
   bTagType_ = jetMETPSet.getParameter<std::string>("bTagType");
 
-  edm::ParameterSet jpsiPSet = pset.getParameter<edm::ParameterSet>("jpsi");
-  jpsiLabel_ = jpsiPSet.getParameter<edm::InputTag>("src");
+  edm::ParameterSet jpsiMuMuPSet = pset.getParameter<edm::ParameterSet>("jpsiToMuMu");
+  jpsiMuMuLabel_ = jpsiMuMuPSet.getParameter<edm::InputTag>("src");
+
+  edm::ParameterSet jpsiElElPSet = pset.getParameter<edm::ParameterSet>("jpsiToElEl");
+  jpsiElElLabel_ = jpsiElElPSet.getParameter<edm::InputTag>("src");
 
   // Event counter
   eventCounterLabels_ = pset.getParameter<VString>("eventCounters");
@@ -412,16 +416,16 @@ void KGenericNtupleMaker::analyze(const edm::Event& event, const edm::EventSetup
   }
   if ( fevent_->jets_pt_->size() < jetMinNumber_ ) return;
 
-  // Do Jpsi
-  edm::Handle<std::vector<reco::VertexCompositeCandidate> > jpsiHandle;
-  event.getByLabel(jpsiLabel_, jpsiHandle);
-  edm::Handle<doubles> jpsiLxyHandle;
-  edm::Handle<doubles> jpsiL3DHandle;
-  event.getByLabel(edm::InputTag(jpsiLabel_.label(), "lxy"), jpsiLxyHandle);
-  event.getByLabel(edm::InputTag(jpsiLabel_.label(), "l3D"), jpsiL3DHandle);
-  for ( int i=0, n=jpsiHandle->size(); i<n; ++i )
+  // Do Jpsi(J/psi to MuMu)
+  edm::Handle<std::vector<reco::VertexCompositeCandidate> > jpsiMuMuHandle;
+  event.getByLabel(jpsiMuMuLabel_, jpsiMuMuHandle);
+  edm::Handle<doubles> jpsiMuMuLxyHandle;
+  edm::Handle<doubles> jpsiMuMuL3DHandle;
+  event.getByLabel(edm::InputTag(jpsiMuMuLabel_.label(), "lxy"), jpsiMuMuLxyHandle);
+  event.getByLabel(edm::InputTag(jpsiMuMuLabel_.label(), "l3D"), jpsiMuMuL3DHandle);
+  for ( int i=0, n=jpsiMuMuHandle->size(); i<n; ++i )
   {
-    const reco::VertexCompositeCandidate& jpsiCand = jpsiHandle->at(i);
+    const reco::VertexCompositeCandidate& jpsiCand = jpsiMuMuHandle->at(i);
     const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(jpsiCand.daughter(0));
     const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(jpsiCand.daughter(1));
 
@@ -429,8 +433,8 @@ void KGenericNtupleMaker::analyze(const edm::Event& event, const edm::EventSetup
     fevent_->jpsis_eta_->push_back(jpsiCand.eta() );
     fevent_->jpsis_phi_->push_back(jpsiCand.phi() );
     fevent_->jpsis_m_  ->push_back(jpsiCand.mass());
-    fevent_->jpsis_lxy_->push_back(jpsiLxyHandle->at(i));
-    fevent_->jpsis_l3D_->push_back(jpsiL3DHandle->at(i));
+    fevent_->jpsis_lxy_->push_back(jpsiMuMuLxyHandle->at(i));
+    fevent_->jpsis_l3D_->push_back(jpsiMuMuL3DHandle->at(i));
     fevent_->jpsis_vProb_->push_back(TMath::Prob(  jpsiCand.vertexChi2(),(int)jpsiCand.vertexNdof()));
 
     fevent_->jpsis_pt1_ ->push_back(muon1->pt() );
@@ -446,6 +450,53 @@ void KGenericNtupleMaker::analyze(const edm::Event& event, const edm::EventSetup
     fevent_->jpsis_nPixHits1_->push_back(muonTrack1->hitPattern().numberOfValidPixelHits());
     fevent_->jpsis_nPixHits2_->push_back(muonTrack2->hitPattern().numberOfValidPixelHits());
   }
+  // Do Jpsi(J/psi to ElEl)
+  edm::Handle<std::vector<reco::VertexCompositeCandidate> > jpsiElElHandle;
+  event.getByLabel(jpsiElElLabel_, jpsiElElHandle);
+  if ( !jpsiElElHandle.isValid() ) {
+    LogDebug("KrAFTGenericNtuple")<<"jpsiHandler for Jpsi2ElEl is not working\n";
+    return;
+  }
+  else { 
+    edm::Handle<doubles> jpsiElElLxyHandle;
+    edm::Handle<doubles> jpsiElElL3DHandle;
+    event.getByLabel(edm::InputTag(jpsiElElLabel_.label(), "lxy"), jpsiElElLxyHandle);
+    event.getByLabel(edm::InputTag(jpsiElElLabel_.label(), "l3D"), jpsiElElL3DHandle);
+    for ( int i=0, n=jpsiElElHandle->size(); i<n; ++i )
+    {
+      const reco::VertexCompositeCandidate& jpsiCand = jpsiElElHandle->at(i);
+      const pat::Electron* el1 = dynamic_cast<const pat::Electron*>(jpsiCand.daughter(0));
+      const pat::Electron* el2 = dynamic_cast<const pat::Electron*>(jpsiCand.daughter(1));
+
+      fevent_->jpsis_pt_ ->push_back(jpsiCand.pt()  );
+      fevent_->jpsis_eta_->push_back(jpsiCand.eta() );
+      fevent_->jpsis_phi_->push_back(jpsiCand.phi() );
+      fevent_->jpsis_m_  ->push_back(jpsiCand.mass());
+      fevent_->jpsis_lxy_->push_back(jpsiMuMuLxyHandle->at(i));
+      fevent_->jpsis_l3D_->push_back(jpsiMuMuL3DHandle->at(i));
+      fevent_->jpsis_vProb_->push_back(TMath::Prob(  jpsiCand.vertexChi2(),(int)jpsiCand.vertexNdof()));
+    
+      fevent_->jpsis_id1_ ->push_back( el1->pdgId() );
+      fevent_->jpsis_pt1_ ->push_back( el1->pt() );
+      fevent_->jpsis_eta1_->push_back( el1->eta());
+      fevent_->jpsis_phi1_->push_back( el1->phi());
+
+      fevent_->jpsis_id2_ ->push_back( el2->pdgId() );
+      fevent_->jpsis_pt2_ ->push_back( el2->pt() );
+      fevent_->jpsis_eta2_->push_back( el2->eta());
+      fevent_->jpsis_phi2_->push_back( el2->phi());
+    
+      fevent_->jpsis_nPixHits1_->push_back( -1);
+      fevent_->jpsis_nPixHits2_->push_back( -1);
+    /*
+    reco::TrackRef muonTrack1 = muon1->improvedMuonBestTrack();
+    reco::TrackRef muonTrack2 = muon2->improvedMuonBestTrack();
+    fevent_->jpsis_nPixHits1_->push_back(muonTrack1->hitPattern().numberOfValidPixelHits());
+    fevent_->jpsis_nPixHits2_->push_back(muonTrack2->hitPattern().numberOfValidPixelHits());
+    */
+    }
+  }
+
 
   // Now put jets in current event to the event cache
   fevent_->run_ = event.run();

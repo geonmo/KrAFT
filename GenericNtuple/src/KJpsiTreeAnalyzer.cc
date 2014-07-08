@@ -363,6 +363,8 @@ bool KJpsiTreeAnalyzer::analyze()
     const double eta2 = event_->jpsis_eta2_->at(i);
     const double pt1 = event_->jpsis_pt1_->at(i);
     const double pt2 = event_->jpsis_pt2_->at(i);
+    const double id1 = event_->jpsis_id1_->at(i);
+    const double id2 = event_->jpsis_id2_->at(i);
 
     const double l3D    = event_->jpsis_l3D_->at(i);
     const double vProb    = event_->jpsis_vProb_->at(i);
@@ -395,6 +397,9 @@ bool KJpsiTreeAnalyzer::analyze()
 		jpsis_eta2_->push_back(eta2);
 		jpsis_pt1_->push_back(pt1);
 		jpsis_pt2_->push_back(pt2);
+    jpsis_id1_->push_back(id1);
+    jpsis_id2_->push_back(id2);
+
 		
 
     //jets.push_back(LorentzVector());

@@ -32,8 +32,13 @@ event = cms.EDAnalyzer("KGenericNtupleMaker",
         leptonDeltaR = cms.double(0.5),
         bTagType = cms.string("combinedSecondaryVertexBJetTags"),
     ),
-    jpsi = cms.PSet(
+    jpsiToMuMu = cms.PSet(
         src = cms.InputTag("jpsiToMuMu"),
+        minNumber = cms.uint32(0),
+        maxNumber = cms.uint32(999),
+    ),
+    jpsiToElEl = cms.PSet(
+        src = cms.InputTag("jpsiToElEl"),
         minNumber = cms.uint32(0),
         maxNumber = cms.uint32(999),
     ),

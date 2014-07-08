@@ -56,8 +56,8 @@ public:
 
   doublesP jpsis_pt_, jpsis_eta_, jpsis_phi_, jpsis_m_;
   doublesP jpsis_lxy_,jpsis_l3D_, jpsis_vProb_;
-  doublesP jpsis_pt1_, jpsis_eta1_, jpsis_phi1_;
-  doublesP jpsis_pt2_, jpsis_eta2_, jpsis_phi2_;
+  doublesP jpsis_pt1_, jpsis_eta1_, jpsis_phi1_, jpsis_id1_;
+  doublesP jpsis_pt2_, jpsis_eta2_, jpsis_phi2_, jpsis_id2_;;
   intsP jpsis_nPixHits1_, jpsis_nPixHits2_;
 
   // Generator level information
