@@ -47,8 +47,8 @@ private:
   double ttbar_vsumM_;
 
   doublesP jpsis_pt_, jpsis_eta_ , jpsis_phi_, jpsis_m_,jpsis_jetdR_;
-  doublesP jpsis_eta1_, jpsis_phi1_, jpsis_pt1_; 
-  doublesP jpsis_eta2_, jpsis_phi2_, jpsis_pt2_;
+  doublesP jpsis_eta1_, jpsis_phi1_, jpsis_pt1_, jpsis_id1_; 
+  doublesP jpsis_eta2_, jpsis_phi2_, jpsis_pt2_, jpsis_id2_;
   doublesP jpsis_vProb_;
   doublesP jpsis_l3D_;
 

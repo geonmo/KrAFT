@@ -437,10 +437,12 @@ void KGenericNtupleMaker::analyze(const edm::Event& event, const edm::EventSetup
     fevent_->jpsis_l3D_->push_back(jpsiMuMuL3DHandle->at(i));
     fevent_->jpsis_vProb_->push_back(TMath::Prob(  jpsiCand.vertexChi2(),(int)jpsiCand.vertexNdof()));
 
+    fevent_->jpsis_id1_ ->push_back(muon1->pdgId() );
     fevent_->jpsis_pt1_ ->push_back(muon1->pt() );
     fevent_->jpsis_eta1_->push_back(muon1->eta());
     fevent_->jpsis_phi1_->push_back(muon1->phi());
 
+    fevent_->jpsis_id2_ ->push_back(muon2->pdgId() );
     fevent_->jpsis_pt2_ ->push_back(muon2->pt() );
     fevent_->jpsis_eta2_->push_back(muon2->eta());
     fevent_->jpsis_phi2_->push_back(muon2->phi());

@@ -348,6 +348,8 @@ bool KJpsiTreeAnalyzer::analyze()
   jpsis_eta2_->clear();
   jpsis_pt1_->clear();
   jpsis_pt2_->clear();
+  jpsis_id1_->clear();
+  jpsis_id2_->clear();
 
 
 
