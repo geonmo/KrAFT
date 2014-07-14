@@ -419,38 +419,44 @@ void KGenericNtupleMaker::analyze(const edm::Event& event, const edm::EventSetup
   // Do Jpsi(J/psi to MuMu)
   edm::Handle<std::vector<reco::VertexCompositeCandidate> > jpsiMuMuHandle;
   event.getByLabel(jpsiMuMuLabel_, jpsiMuMuHandle);
-  edm::Handle<doubles> jpsiMuMuLxyHandle;
-  edm::Handle<doubles> jpsiMuMuL3DHandle;
-  event.getByLabel(edm::InputTag(jpsiMuMuLabel_.label(), "lxy"), jpsiMuMuLxyHandle);
-  event.getByLabel(edm::InputTag(jpsiMuMuLabel_.label(), "l3D"), jpsiMuMuL3DHandle);
-  for ( int i=0, n=jpsiMuMuHandle->size(); i<n; ++i )
-  {
-    const reco::VertexCompositeCandidate& jpsiCand = jpsiMuMuHandle->at(i);
-    const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(jpsiCand.daughter(0));
-    const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(jpsiCand.daughter(1));
+  if ( !jpsiMuMuHandle.isValid() ) {
+    LogDebug("KrAFTGenericNtuple")<<"jpsiHandler for Jpsi to MuMu is not working\n";
+    return;
+  }
+	else {
+	  edm::Handle<doubles> jpsiMuMuLxyHandle;
+ 	  edm::Handle<doubles> jpsiMuMuL3DHandle;
+  	event.getByLabel(edm::InputTag(jpsiMuMuLabel_.label(), "lxy"), jpsiMuMuLxyHandle);
+  	event.getByLabel(edm::InputTag(jpsiMuMuLabel_.label(), "l3D"), jpsiMuMuL3DHandle);
+  	for ( int i=0, n=jpsiMuMuHandle->size(); i<n; ++i )
+ 		{
+    	const reco::VertexCompositeCandidate& jpsiCand = jpsiMuMuHandle->at(i);
+    	const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(jpsiCand.daughter(0));
+    	const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(jpsiCand.daughter(1));
 
-    fevent_->jpsis_pt_ ->push_back(jpsiCand.pt()  );
-    fevent_->jpsis_eta_->push_back(jpsiCand.eta() );
-    fevent_->jpsis_phi_->push_back(jpsiCand.phi() );
-    fevent_->jpsis_m_  ->push_back(jpsiCand.mass());
-    fevent_->jpsis_lxy_->push_back(jpsiMuMuLxyHandle->at(i));
-    fevent_->jpsis_l3D_->push_back(jpsiMuMuL3DHandle->at(i));
-    fevent_->jpsis_vProb_->push_back(TMath::Prob(  jpsiCand.vertexChi2(),(int)jpsiCand.vertexNdof()));
+    	fevent_->jpsis_pt_ ->push_back(jpsiCand.pt()  );
+    	fevent_->jpsis_eta_->push_back(jpsiCand.eta() );
+    	fevent_->jpsis_phi_->push_back(jpsiCand.phi() );
+    	fevent_->jpsis_m_  ->push_back(jpsiCand.mass());
+    	fevent_->jpsis_lxy_->push_back(jpsiMuMuLxyHandle->at(i));
+    	fevent_->jpsis_l3D_->push_back(jpsiMuMuL3DHandle->at(i));
+    	fevent_->jpsis_vProb_->push_back(TMath::Prob(  jpsiCand.vertexChi2(),(int)jpsiCand.vertexNdof()));
 
-    fevent_->jpsis_id1_ ->push_back(muon1->pdgId() );
-    fevent_->jpsis_pt1_ ->push_back(muon1->pt() );
-    fevent_->jpsis_eta1_->push_back(muon1->eta());
-    fevent_->jpsis_phi1_->push_back(muon1->phi());
+    	fevent_->jpsis_id1_ ->push_back(muon1->pdgId() );
+    	fevent_->jpsis_pt1_ ->push_back(muon1->pt() );
+    	fevent_->jpsis_eta1_->push_back(muon1->eta());
+    	fevent_->jpsis_phi1_->push_back(muon1->phi());
 
-    fevent_->jpsis_id2_ ->push_back(muon2->pdgId() );
-    fevent_->jpsis_pt2_ ->push_back(muon2->pt() );
-    fevent_->jpsis_eta2_->push_back(muon2->eta());
-    fevent_->jpsis_phi2_->push_back(muon2->phi());
+    	fevent_->jpsis_id2_ ->push_back(muon2->pdgId() );
+    	fevent_->jpsis_pt2_ ->push_back(muon2->pt() );
+    	fevent_->jpsis_eta2_->push_back(muon2->eta());
+    	fevent_->jpsis_phi2_->push_back(muon2->phi());
 
-    reco::TrackRef muonTrack1 = muon1->improvedMuonBestTrack();
-    reco::TrackRef muonTrack2 = muon2->improvedMuonBestTrack();
-    fevent_->jpsis_nPixHits1_->push_back(muonTrack1->hitPattern().numberOfValidPixelHits());
-    fevent_->jpsis_nPixHits2_->push_back(muonTrack2->hitPattern().numberOfValidPixelHits());
+    	reco::TrackRef muonTrack1 = muon1->improvedMuonBestTrack();
+    	reco::TrackRef muonTrack2 = muon2->improvedMuonBestTrack();
+    	fevent_->jpsis_nPixHits1_->push_back(muonTrack1->hitPattern().numberOfValidPixelHits());
+    	fevent_->jpsis_nPixHits2_->push_back(muonTrack2->hitPattern().numberOfValidPixelHits());
+  	}
   }
   // Do Jpsi(J/psi to ElEl)
   edm::Handle<std::vector<reco::VertexCompositeCandidate> > jpsiElElHandle;
@@ -474,8 +480,8 @@ void KGenericNtupleMaker::analyze(const edm::Event& event, const edm::EventSetup
       fevent_->jpsis_eta_->push_back(jpsiCand.eta() );
       fevent_->jpsis_phi_->push_back(jpsiCand.phi() );
       fevent_->jpsis_m_  ->push_back(jpsiCand.mass());
-      fevent_->jpsis_lxy_->push_back(jpsiMuMuLxyHandle->at(i));
-      fevent_->jpsis_l3D_->push_back(jpsiMuMuL3DHandle->at(i));
+      fevent_->jpsis_lxy_->push_back(jpsiElElLxyHandle->at(i));
+      fevent_->jpsis_l3D_->push_back(jpsiElElL3DHandle->at(i));
       fevent_->jpsis_vProb_->push_back(TMath::Prob(  jpsiCand.vertexChi2(),(int)jpsiCand.vertexNdof()));
     
       fevent_->jpsis_id1_ ->push_back( el1->pdgId() );

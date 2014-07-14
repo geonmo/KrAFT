@@ -322,7 +322,7 @@ bool KJpsiToElElProducer::filter(edm::Event& event, const edm::EventSetup& event
 }
 
 double KJpsiToElElProducer::GetMass( pat::Electron electron) {
-	return 0.1056583715; 
+	return 0.0005; 
 }
 typedef KJpsiToElElProducer KJpsiElElProducer;
 #include "FWCore/Framework/interface/MakerMacros.h"

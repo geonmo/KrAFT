@@ -5,9 +5,7 @@ from KrAFT.Configuration.customise_cff import *
 process = initialise(decayMode="dilepton", runOnMC=runOnMC)
 addNtupleStep(process, runOnMC=runOnMC)
 process.maxEvents.input = -1
-process.event.muon.src=cms.InputTag("goodMuonsForJpsi")
-process.event.muon.src=cms.InputTag("goodElectronsForJpsi")
-process.source.fileNames = ['file:mc.root']
+#process.source.fileNames = ['file:mc.root']
 """
 import os
 hostName = os.environ['HOSTNAME']
