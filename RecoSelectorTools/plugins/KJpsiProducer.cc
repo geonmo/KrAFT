@@ -109,6 +109,10 @@ KJpsiProducer<T>::KJpsiProducer(const edm::ParameterSet& pset)
   produces<edm::ValueMap<double> >("l3D");
   produces<edm::ValueMap<double> >("jetDR");
   produces<edm::ValueMap<double> >("vProb");
+  produces<edm::ValueMap<double> >("lep1Pt");
+  produces<edm::ValueMap<double> >("lep2Pt");
+  produces<edm::ValueMap<double> >("lep1Eta");
+  produces<edm::ValueMap<double> >("lep2Eta");
 
 }
 
@@ -124,6 +128,10 @@ bool KJpsiProducer<T>::filter(edm::Event& event, const edm::EventSetup& eventSet
   std::vector<double> decayLengths3D;
   std::vector<double> minJetDR;
   std::vector<double> vProb;
+  std::vector<double> lep1Pt;
+  std::vector<double> lep2Pt;
+  std::vector<double> lep1Eta;
+  std::vector<double> lep2Eta;
 
   edm::Handle< reco::VertexCollection >  goodPVHandle;
   event.getByLabel(goodPrimaryVertexLabel_ , goodPVHandle);
@@ -132,7 +140,10 @@ bool KJpsiProducer<T>::filter(edm::Event& event, const edm::EventSetup& eventSet
     event.put( getPtrValueMap( outHandle, decayLengths), "lxy");
     event.put( getPtrValueMap( outHandle, decayLengths3D), "l3D");
     event.put( getPtrValueMap( outHandle, vProb), "vProb");
-    event.put( getPtrValueMap( outHandle, minJetDR), "jetDR");
+    event.put( getPtrValueMap( outHandle, lep1Pt), "lep1Pt");
+    event.put( getPtrValueMap( outHandle, lep2Pt), "lep2Pt");
+    event.put( getPtrValueMap( outHandle, lep1Eta), "lep1Eta");
+    event.put( getPtrValueMap( outHandle, lep2Eta), "lep2Eta");
     return false;
   }
   const reco::Vertex goodPV = goodPVHandle->at(0);
@@ -256,7 +267,11 @@ bool KJpsiProducer<T>::filter(edm::Event& event, const edm::EventSetup& eventSet
       reco::LeafCandidate newLep2(-leptonId_, math::XYZTLorentzVector(mom2.x(), mom2.y(), mom2.z(), candE2));
       cand->addDaughter(newLep1);
       cand->addDaughter(newLep2);
-
+			
+			lep1Pt.push_back( newLep1.pt());
+			lep2Pt.push_back( newLep2.pt());
+			lep1Eta.push_back( newLep1.eta());
+			lep2Eta.push_back( newLep2.eta());
       cand->setPdgId(pdgId_);
       AddFourMomenta addP4;
       addP4.set(*cand);
@@ -287,6 +302,10 @@ bool KJpsiProducer<T>::filter(edm::Event& event, const edm::EventSetup& eventSet
   event.put( getPtrValueMap( outHandle, decayLengths3D), "l3D");
   event.put( getPtrValueMap( outHandle, vProb), "vProb");
   event.put( getPtrValueMap( outHandle, minJetDR), "jetDR");
+  event.put( getPtrValueMap( outHandle, lep1Pt), "lep1Pt");
+  event.put( getPtrValueMap( outHandle, lep2Pt), "lep2Pt");
+  event.put( getPtrValueMap( outHandle, lep1Eta), "lep1Eta");
+  event.put( getPtrValueMap( outHandle, lep2Eta), "lep2Eta");
 
   return (nCands >= minNumber_ and nCands <= maxNumber_);
 }

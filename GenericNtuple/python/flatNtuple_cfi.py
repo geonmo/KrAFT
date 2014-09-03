@@ -65,13 +65,24 @@ fEvent = cms.EDAnalyzer("FlatCandToNtupleMaker",
         jpsiMuMu = cms.PSet(
             src = cms.InputTag("flatJpsiMuMu"),
             exprs = p4Set.clone(),
-            vmaps = cms.untracked.vstring("lxy", "l3D", "jetDR", "vProb"),
+            vmaps = cms.untracked.vstring("lxy", "l3D", "jetDR", "vProb","lep1Pt","lep2Pt","lep1Eta","lep2Eta"),
         ),
         jpsiElEl = cms.PSet(
             src = cms.InputTag("flatJpsiElEl"),
             exprs = p4Set.clone(),
-            vmaps = cms.untracked.vstring("lxy", "l3D", "jetDR", "vProb"),
+            vmaps = cms.untracked.vstring("lxy", "l3D", "jetDR", "vProb","lep1Pt","lep2Pt","lep1Eta","lep2Eta"),
         ),
+        zMuMu = cms.PSet(
+            src = cms.InputTag("flatZMuMu"),
+            exprs = p4Set.clone(),
+            vmaps = cms.untracked.vstring("muon1Pt"),
+        ),
+        zElEl = cms.PSet(
+            src = cms.InputTag("flatZElEl"),
+            exprs = p4Set.clone(),
+            vmaps = cms.untracked.vstring("elec1Pt"),
+        ),
+				
         pseudoTopLepton = cms.PSet(
             src = cms.InputTag("flatPseudoTopLepton"),
             exprs = p4Set.clone(),

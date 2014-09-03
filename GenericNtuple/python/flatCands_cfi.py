@@ -61,6 +61,10 @@ flatJpsiMuMu = cms.EDProducer("FlatCandProducer",
       l3D = cms.InputTag("jpsiToMuMu", "l3D"),
       jetDR = cms.InputTag("jpsiToMuMu", "jetDR"),
       vProb = cms.InputTag("jpsiToMuMu", "vProb"),
+      lep1Pt = cms.InputTag("jpsiToMuMu", "lep1Pt"),
+      lep2Pt = cms.InputTag("jpsiToMuMu", "lep2Pt"),
+      lep1Eta = cms.InputTag("jpsiToMuMu", "lep1Eta"),
+      lep2Eta = cms.InputTag("jpsiToMuMu", "lep2Eta"),
     ),
     selections = cms.PSet(),
 )
@@ -71,6 +75,25 @@ flatJpsiElEl = cms.EDProducer("FlatCandProducer",
       l3D = cms.InputTag("jpsiToElEl", "l3D"),
       jetDR = cms.InputTag("jpsiToElEl", "jetDR"),
       vProb = cms.InputTag("jpsiToElEl", "vProb"),
+      lep1Pt = cms.InputTag("jpsiToElEl", "lep1Pt"),
+      lep2Pt = cms.InputTag("jpsiToElEl", "lep2Pt"),
+      lep1Eta = cms.InputTag("jpsiToElEl", "lep1Eta"),
+      lep2Eta = cms.InputTag("jpsiToElEl", "lep2Eta"),
+    ),
+    selections = cms.PSet(),
+)
+
+flatZMuMu = cms.EDProducer("FlatCandProducer",
+    src = cms.InputTag("ZToMuMuCandidates"),
+    variables = cms.PSet(
+			muon1Pt = cms.string("daughter('muon1').pt()"),
+    ),
+    selections = cms.PSet(),
+)
+flatZElEl = cms.EDProducer("FlatCandProducer",
+    src = cms.InputTag("ZToElElCandidates"),
+    variables = cms.PSet(
+			elec1Pt = cms.string("daughter('electron1').pt()"),
     ),
     selections = cms.PSet(),
 )
