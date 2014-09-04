@@ -7,7 +7,6 @@ from KrAFT.GeneratorTools.partons_cff import *
 from KrAFT.RecoSelectorTools.leptonSelector_cfi import *
 from KrAFT.RecoSelectorTools.jetSelector_cfi import *
 from KrAFT.RecoSelectorTools.jpsiSelector_cfi import *
-from KrAFT.RecoSelectorTools.zSelector_cfi import *
 from KrAFT.GenericNtuple.flatEventInfo_cfi import *
 from KrAFT.GenericNtuple.flatCands_cfi import *
 
@@ -15,14 +14,12 @@ analysisObjectSequence = cms.Sequence(
     pileupWeight + pdfWeight
   + goodMuons + goodElectrons * goodJets
   * jpsiToMuMu + jpsiToElEl
-  * ZToMuMuCandidates +ZToElElCandidates
 
   + flatEventInfo
   * flatMuons + flatElectrons + flatJets
   + flatMETs + flatMETsUp + flatMETsDn
   + flatMETsRes + flatMETsResUp + flatMETsResDn
   + flatJpsiMuMu + flatJpsiElEl
-  + flatZMuMu + flatZElEl
 )
 
 goodJets.isMC = True
