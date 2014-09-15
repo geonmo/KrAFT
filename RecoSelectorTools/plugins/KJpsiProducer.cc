@@ -256,7 +256,7 @@ bool KJpsiProducer<T>::filter(edm::Event& event, const edm::EventSetup& eventSet
       reco::LeafCandidate newLep2(-leptonId_, math::XYZTLorentzVector(mom2.x(), mom2.y(), mom2.z(), candE2));
       cand->addDaughter(newLep1);
       cand->addDaughter(newLep2);
-
+      
       cand->setPdgId(pdgId_);
       AddFourMomenta addP4;
       addP4.set(*cand);
