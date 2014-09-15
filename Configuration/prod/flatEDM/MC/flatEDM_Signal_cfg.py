@@ -27,5 +27,6 @@ process.CANDSEL = cms.Path(
 )
 
 process.out.SelectEvents.SelectEvents.append("GEN")
+process.out.SelectEvents.SelectEvents.append("CANDSEL")
 process.output = cms.EndPath(process.out)
 
