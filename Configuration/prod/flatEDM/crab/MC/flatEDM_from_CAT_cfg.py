@@ -20,6 +20,7 @@ process.load("KrAFT.GenericNtuple.flatCATCands_cfi")
 
 process.CANDSEL = cms.Path(
   process.flatCATMuons
+  + process.flatCATElectrons
   #process.flatEventInfo+flatMuons
 )
 process.maxEvents = cms.untracked.PSet(
